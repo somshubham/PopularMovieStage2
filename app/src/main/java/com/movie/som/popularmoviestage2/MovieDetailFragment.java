@@ -1,9 +1,11 @@
 package com.movie.som.popularmoviestage2;
 
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 
 import com.movie.som.popularmoviestage2.listviewHelper.Helper;
 import com.movie.som.popularmoviestage2.trailerCustomClass.MovieTrailer;
+import com.movie.som.popularmoviestage2.trailerCustomClass.TrailerAdapter;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -37,24 +40,24 @@ import java.util.List;
 
 public class MovieDetailFragment extends Fragment {
 
- //private    TrailerAdapter adapter;
+private TrailerAdapter adapter;
 
-    private ArrayAdapter<String> adapter;
+   // private ArrayAdapter<String> adapter;
     private String data;
-  //  private String data;
+   //  private String data;
     String youtubeLink[]=new String[]{"x"};
-    //List<String> urls = new ArrayList<>();
+
     String [] urls;
     ListView listView;
     String[] st;
 
     MovieTrailer[] movieTrailers = {
-            new MovieTrailer("Cupcake")
+            new MovieTrailer("sdsaa")
 
 
     };
 
-
+    ArrayList<MovieTrailer> trailersCount = new ArrayList<MovieTrailer>();
 
 
 
@@ -72,6 +75,15 @@ public class MovieDetailFragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
 
+
+
+
+
+
+
+
+
+
         data = intent.getStringExtra("title");
         TextView t=(TextView)rootView.findViewById(R.id.Title);
         t.setText(data);
@@ -88,9 +100,8 @@ public class MovieDetailFragment extends Fragment {
         data = intent.getStringExtra("url");
         ImageView imageView=(ImageView)rootView.findViewById(R.id.movie_poster);
         Picasso.with(getActivity()).load(data).into(imageView);
-        /*  Uri url= Uri.parse(data);
-        Picasso.load(url).into(imageView);*/
-//my movie id ......   to fetch the data from the movie db .....
+
+       //my movie id ......   to fetch the data from the movie db .....
         data=intent.getStringExtra("id");
         String movieIdfetched=data;
         TextView t1=(TextView)rootView.findViewById(R.id.movieid);
@@ -100,38 +111,31 @@ public class MovieDetailFragment extends Fragment {
         // making the call to the function .....
 
         updateMovie(movieIdfetched);
-       // String[] st=new String[]{"trailer1","trailer2"+data};
-       // String[] st=new String[]{"Trailer 1","Trailer 2","Trailer 3"};
-        //blank list for the list view of thhe trailer ......
-        st=new String[]{""};
-
-        List<String> trailer = new ArrayList<String>(Arrays.asList(st));
 
 
 
-/*//adapter = new ArrayAdapter<String>(getActivity(),
-        R.layout.list_item_trailer, R.id.list_item_trailer_textview, trailer);*/
+        //  trailersCount.add(new MovieTrailer("trailer1"));
 
-       adapter = new ArrayAdapter<String>(getActivity(),
-                R.layout.list_item_trailer, R.id.list_item_trailer_textview, trailer);
-//adapter=new TrailerAdapter(getActivity(), Arrays.asList(movieTrailers));
+        ArrayList<MovieTrailer> arrayOfTrailer = trailersCount;
+        adapter=new TrailerAdapter(getActivity(),arrayOfTrailer);
+
+
 
          listView=(ListView)rootView.findViewById(R.id.listView);
-        listView.setAdapter(adapter);
-        Helper.getListViewSize(listView);
-      listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+         listView.setAdapter(adapter);
+         Helper.getListViewSize(listView);
+         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
           @Override
           public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
               //Toast.makeText(getActivity(), "hi this"+adapter.getItem(position), Toast.LENGTH_SHORT).show();
 
-             //String s="http://www.youtube.com/watch?v="+adapter.getItem(position);
-           //   String s=""+adapter.getItem(position);
+
               int id=position;
-             // if(ur)
+
               String youtube=""+urls[id];
               Log.v("youtube",""+urls[id]);
-            //  Log.v("youtube",""+s);
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtube)));
+              //start the youtube trailer on click @trailer
+              startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(youtube)));
           }
       });
 
@@ -186,6 +190,7 @@ public class MovieDetailFragment extends Fragment {
             // These are the names of the JSON objects that need to be extracted.
             final String OWM_LIST = "results";
             final String id = "key";
+            final String name = "name";
 
 
             JSONObject MovieJson = new JSONObject(MovieJsonStr);
@@ -332,30 +337,30 @@ public class MovieDetailFragment extends Fragment {
             return null;
         }
 
+
+
+
+
+
+        @TargetApi(Build.VERSION_CODES.HONEYCOMB)
         protected void onPostExecute(String[] strings) {
-            // MovieAdapter.replace(strings);
-            //  MovieAdapter.replace(strings);
-          Log.v("myn",""+urls[0]);
+
             if (strings != null) {
                 //adding the number to  add the number of trailers for the movies ........
-int i=1;
-        adapter.clear();
+                   int i=1;
+               //    adapter.clear();
+              //  ArrayList<MovieTrailer> newUsers = new ArrayList<MovieTrailer>();
             for (String s : strings) {
                 Log.v("mylogfile", "trailer id: " + s);
-
-           adapter.add("Trailer "+i);
+                trailersCount.add(new MovieTrailer("Trailer"+i));
+               // adapter.add("Trailer "+i);
                 i++;
-//mForecastAdapter.add(s);
+
             }
 
 
-                //mAdapter = new MovieAdapter(getActivity(),strings);
-               // gridView.setAdapter(mAdapter);
-
-
-
 //update the list size for the total number of the trailers .....................
-                updateList();
+      updateList();
 
             }
 

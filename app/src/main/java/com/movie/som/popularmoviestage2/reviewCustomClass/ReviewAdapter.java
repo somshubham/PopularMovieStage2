@@ -1,4 +1,4 @@
-package com.movie.som.popularmoviestage2.trailerCustomClass;
+package com.movie.som.popularmoviestage2.reviewCustomClass;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -11,11 +11,11 @@ import com.movie.som.popularmoviestage2.R;
 
 import java.util.List;
 
-public class TrailerAdapter extends ArrayAdapter<MovieTrailer> {
-    private static final String LOG_TAG = TrailerAdapter.class.getSimpleName();
+public class ReviewAdapter extends ArrayAdapter<MovieReview> {
+    private static final String LOG_TAG = ReviewAdapter.class.getSimpleName();
 
 
-    public TrailerAdapter(Activity context, List<MovieTrailer> movieTrailers) {
+    public ReviewAdapter(Activity context, List<MovieReview> movieTrailers) {
 
         super(context, 0, movieTrailers);
     }
@@ -23,7 +23,7 @@ public class TrailerAdapter extends ArrayAdapter<MovieTrailer> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        MovieTrailer movieTrailer = getItem(position);
+        MovieReview movieTrailer = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_trailer_custom_layout, parent, false);
