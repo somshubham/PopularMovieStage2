@@ -15,7 +15,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.paolorotolo.expandableheightlistview.ExpandableHeightListView;
 import com.movie.som.popularmoviestage2.listviewHelper.Helper;
+import com.movie.som.popularmoviestage2.reviewCustomClass.FetchMovieReviewData;
+import com.movie.som.popularmoviestage2.reviewCustomClass.MovieReview;
+import com.movie.som.popularmoviestage2.reviewCustomClass.ReviewAdapter;
 import com.movie.som.popularmoviestage2.trailerCustomClass.FetchMovieTrailerData;
 import com.movie.som.popularmoviestage2.trailerCustomClass.MovieTrailer;
 import com.movie.som.popularmoviestage2.trailerCustomClass.TrailerAdapter;
@@ -27,6 +31,7 @@ import java.util.ArrayList;
 public class MovieDetailFragment extends Fragment {
 
 public static TrailerAdapter adapter;
+    public static ReviewAdapter adapterReview;
 
 
     private String data;
@@ -34,10 +39,12 @@ public static TrailerAdapter adapter;
 
    public static   String [] urls;
    public static ListView listView;
+    public static ListView listView2;
     String[] trailername;
 
 
     public static   ArrayList<MovieTrailer> trailersCount = new ArrayList<MovieTrailer>();
+    public static   ArrayList<MovieReview> reviewCount = new ArrayList<MovieReview>();
 
 
 
@@ -90,20 +97,35 @@ public static TrailerAdapter adapter;
 
         // making the call to the function .....
 
-        updateMovie(movieIdfetched);
+        updateMovieDetail(movieIdfetched);
 
 
 
         //  trailersCount.add(new MovieTrailer("trailer1"));
+     //  reviewCount.add(new MovieReview("",""));
+
 
         ArrayList<MovieTrailer> arrayOfTrailer = trailersCount;
-        adapter=new TrailerAdapter(getActivity(),arrayOfTrailer);
-
-
+                 adapter=new TrailerAdapter(getActivity(),arrayOfTrailer);
+        ArrayList<MovieReview> arrayOfReview =reviewCount;
+                 adapterReview=new ReviewAdapter(getActivity(),arrayOfReview);
+        //geting the expandable layout android library for adding the list views .......
+        ExpandableHeightListView expandableListView = (ExpandableHeightListView)rootView.findViewById(R.id.expandable_listview);
 
          listView=(ListView)rootView.findViewById(R.id.listView);
-         listView.setAdapter(adapter);
-         Helper.getListViewSize(listView);
+        // listView2=(ListView)rootView.findViewById(R.id.listView2);
+
+
+                    listView.setAdapter(adapter);
+                    expandableListView.setAdapter(adapterReview);
+        //to set the expand of the list view ........
+                    expandableListView.setExpanded(true);
+        //to disable the listview click
+                    expandableListView.setEnabled(false);
+
+        Helper.getListViewSize(listView);
+        // Helper.getListViewSize(listView2);
+
          listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
           @Override
           public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -141,7 +163,13 @@ public static TrailerAdapter adapter;
     //update the list size for the total number of
     public static void updateList() {
 
-        Helper.getListViewSize(listView);
+       Helper.getListViewSize(listView);
+
+    }
+
+    public static void updateList2() {
+
+        //Helper.getListViewSize(listView2);
 
     }
 
@@ -151,9 +179,11 @@ public static TrailerAdapter adapter;
 
 
     //my code.......
-    private void updateMovie(String movieId) {
-        FetchMovieTrailerData movieTask = new FetchMovieTrailerData();
-        movieTask.execute(movieId);
+    private void updateMovieDetail(String movieId) {
+        FetchMovieTrailerData fetchMovieTrailerData = new FetchMovieTrailerData();
+        FetchMovieReviewData fetchMovieReviewData = new FetchMovieReviewData();
+        fetchMovieTrailerData.execute(movieId);
+        fetchMovieReviewData.execute(movieId);
     }
 
 

@@ -23,16 +23,19 @@ public class ReviewAdapter extends ArrayAdapter<MovieReview> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        MovieReview movieTrailer = getItem(position);
+        MovieReview movieReview = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_trailer_custom_layout, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.movie_review_custom_layout, parent, false);
         }
 
 
 
-        TextView versionNameView = (TextView) convertView.findViewById(R.id.list_item_Trailer_name);
-        versionNameView.setText(movieTrailer.trailerName);
+        TextView author = (TextView) convertView.findViewById(R.id.list_item_Reviewer_name);
+        author.setText(movieReview.author);
+        TextView review = (TextView) convertView.findViewById(R.id.textViewReview);
+        review.setText(movieReview.content);
+
 
 
         return convertView;

@@ -4,12 +4,14 @@ package com.movie.som.popularmoviestage2.reviewCustomClass;
  * Created by som on 16/09/16.
  */
 public class MovieReview {
-    String trailerName;
+    String author;
+    String content;
 
 
 
-    public MovieReview(String trailerName)
+    public MovieReview(String author,String content)
     {
-        this.trailerName=trailerName;
+        this.author=author;
+        this.content=content;
     }
 }

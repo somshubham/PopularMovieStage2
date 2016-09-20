@@ -1,4 +1,4 @@
-package com.movie.som.popularmoviestage2.trailerCustomClass;
+package com.movie.som.popularmoviestage2.reviewCustomClass;
 
 import android.annotation.TargetApi;
 import android.os.AsyncTask;
@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.movie.som.popularmoviestage2.BuildConfig;
 import com.movie.som.popularmoviestage2.MovieDetailFragment;
+import com.movie.som.popularmoviestage2.trailerCustomClass.MovieTrailer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,32 +23,33 @@ import java.net.URL;
 /**
  * Created by som on 19/09/16.
  */
-public class FetchMovieTrailerData extends AsyncTask<String , Void,String[]> {
+public class FetchMovieReviewData extends AsyncTask<String , Void,String[]> {
 
 
+    public static   String [] size;
+    public static  String[] author;
+    public static String LOG_TAG = FetchMovieReviewData.class.getSimpleName();
+    public static  String[] content;
 
-    public static  String[] trailername;
-    public static String LOG_TAG = FetchMovieTrailerData.class.getSimpleName();
+    String k;
 
-    int k;
-
-
-   public static  String[] getMovieDataFromJson(String MovieJsonStr)
+    public static  int jsonSize;
+   public static  String[] getMovieReviewDataFromJson(String MovieJsonStr)
             throws JSONException {
 
         // These are the names of the JSON objects that need to be extracted.
         final String OWM_LIST = "results";
-        final String id = "key";
-        final String name = "name";
+        final String id = "author";
+        final String name = "content";
 
 
         JSONObject MovieJson = new JSONObject(MovieJsonStr);
         JSONArray MovieArray = MovieJson.getJSONArray(OWM_LIST);
-        int k=MovieArray.length();
+        jsonSize=MovieArray.length();
 
-        String[] resultStrs=new String[k] ;
-     MovieDetailFragment.urls=new String[k];
-        trailername = new String[k];
+        String[] resultStrs=new String[jsonSize] ;
+        author=new String[jsonSize];
+        content = new String[jsonSize];
 
         int count=0;
         for(int i = 0; i < MovieArray.length(); i++) {
@@ -57,22 +59,20 @@ public class FetchMovieTrailerData extends AsyncTask<String , Void,String[]> {
             JSONObject moviearraydata = MovieArray.getJSONObject(i);
 
 
-            String idvalue = moviearraydata.getString(id);
-            trailername[i] = moviearraydata.getString(name);
-
-
-
-            MovieDetailFragment.urls[i]="http://www.youtube.com/watch?v=" +idvalue;
-
+            author[i] = moviearraydata.getString(id);
+            content[i] = moviearraydata.getString(name);
+            //size[i]=author[i];
 
         }
 
 
-        for (String s :  MovieDetailFragment.urls) {
-            Log.v(LOG_TAG, "Movie id: " + s);
+       //MovieDetailFragment.adapterReview.clear();
+        for (int i=0;i<MovieArray.length();i++  ) {
 
+      //   MovieDetailFragment.reviewCount.add(new MovieReview(""+author[i],""));
+            Log.v(LOG_TAG, "author name: " + author[i]);
         }
-        return  MovieDetailFragment.urls;
+        return  author;
 
     }
 
@@ -81,7 +81,7 @@ public class FetchMovieTrailerData extends AsyncTask<String , Void,String[]> {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
 
-        // If there's no zip code, there's nothing to look up.  Verify size of params.
+
         if (params.length == 0) {
             return null;
         }
@@ -104,7 +104,7 @@ public class FetchMovieTrailerData extends AsyncTask<String , Void,String[]> {
             String s=""+params[0];
 
             final String Movie_BASE_URL2 =
-                    "http://api.themoviedb.org/3/movie/"+s+"/videos?api_key="+ BuildConfig.Movie_db_key;
+                    "http://api.themoviedb.org/3/movie/"+s+"/reviews?api_key="+ BuildConfig.Movie_db_key;
 
 
 
@@ -166,7 +166,7 @@ public class FetchMovieTrailerData extends AsyncTask<String , Void,String[]> {
         }
 
         try {
-            return getMovieDataFromJson(MovieJsonStr);
+            return getMovieReviewDataFromJson(MovieJsonStr);
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
@@ -183,29 +183,29 @@ public class FetchMovieTrailerData extends AsyncTask<String , Void,String[]> {
 
 
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    protected void onPostExecute(String[] strings) {
+ @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+protected void onPostExecute(String[] strings) {
 
-        if (strings != null) {
-            //adding the number to  add the number of trailers for the movies ........
-            int i=0;
-            MovieDetailFragment.adapter.clear();
-            //  ArrayList<MovieTrailer> newUsers = new ArrayList<MovieTrailer>();
-            Log.v("trailerjsonarray",""+k);
-            for (String s : strings) {
-                Log.v("mylogfile", "trailer id: " + s);
-               MovieDetailFragment.trailersCount.add(new MovieTrailer(""+trailername[i]));
-               //  MovieDetailFragment.adapter.add("Trailer "+i);
-                i++;
+        Log.v("oknow","i am executing");
 
-            }
-
+       int j=0;
+     MovieDetailFragment.adapterReview.clear();
+     Log.v("sizeofjson",""+jsonSize);
+      // for(int j=0;j<jsonSize;j++) {
+     for (String s : strings) {
+            MovieDetailFragment.reviewCount.add(new MovieReview(""+author[j],""+content[j]));
+j++;
+       }
+     if (jsonSize==0)
+     {
+         MovieDetailFragment.reviewCount.add(new MovieReview("","no reviews"));
+     }
 
 //update the list size for the total number of the trailers .....................
-       MovieDetailFragment.updateList();
 
-        }
 
+
+MovieDetailFragment.updateList2();
     }
 
 
