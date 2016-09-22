@@ -4,7 +4,9 @@ package com.movie.som.popularmoviestage2;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,7 @@ public static TrailerAdapter adapter;
 
 
    public static   String [] urls;
+    public static   String [] urls2;
    public static ListView listView;
     public static ListView listView2;
     String[] trailername;
@@ -46,7 +49,9 @@ public static TrailerAdapter adapter;
     public static   ArrayList<MovieTrailer> trailersCount = new ArrayList<MovieTrailer>();
     public static   ArrayList<MovieReview> reviewCount = new ArrayList<MovieReview>();
 
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
+    Toolbar toolbar;
 
 
     public MovieDetailFragment() {
@@ -61,28 +66,23 @@ public static TrailerAdapter adapter;
 
 
         Intent intent = getActivity().getIntent();
-
-
-
-
-
-
-
-
-
-
         data = intent.getStringExtra("title");
-        TextView t=(TextView)rootView.findViewById(R.id.Title);
-        t.setText(data);
+
+
         data = intent.getStringExtra("overview");
-        t=(TextView)rootView.findViewById(R.id.overview);
+        TextView t=(TextView)rootView.findViewById(R.id.overview);
         t.setText(data);
+
+
         data = intent.getStringExtra("vote_average");
         t=(TextView)rootView.findViewById(R.id.User_Rating);
         t.setText(data);
+
+
         data = intent.getStringExtra("release_date");
         t=(TextView)rootView.findViewById(R.id.Release_Date);
         t.setText(data);
+
 
         data = intent.getStringExtra("url");
         ImageView imageView=(ImageView)rootView.findViewById(R.id.movie_poster);
@@ -93,6 +93,7 @@ public static TrailerAdapter adapter;
         String movieIdfetched=data;
         TextView t1=(TextView)rootView.findViewById(R.id.movieid);
         t1.setText(data);
+
 
 
         // making the call to the function .....

@@ -38,7 +38,7 @@ public class MainActivityFragment extends Fragment {
     MovieAdapter mAdapter;
     static String[] string1;
     GridView gridView;
-    String[] urls,ids,overviews,vote_averages,release_dates,titles;
+    String[] urls,ids,overviews,vote_averages,release_dates,titles,urls2;
     public MainActivityFragment() {
 
     }
@@ -120,6 +120,7 @@ public class MainActivityFragment extends Fragment {
                 intent.putExtra("title",""+titles[m]);
                 intent.putExtra("overview",""+overviews[m]);
                 intent.putExtra("url",""+urls[m]);
+                intent.putExtra("url2",""+urls2[m]);
                 intent.putExtra("vote_average",""+vote_averages[m]);
                 intent.putExtra("release_date",""+release_dates[m]);
                 intent.putExtra("id",""+ids[m]);
@@ -159,6 +160,7 @@ public class MainActivityFragment extends Fragment {
             final String popularity = "popularity";
             final String title = "title";
             final String vote_average="vote_average";
+            final String backdrop_path="backdrop_path";
 
 
             JSONObject MovieJson = new JSONObject(MovieJsonStr);
@@ -171,6 +173,7 @@ public class MainActivityFragment extends Fragment {
             release_dates=new String[k];
             titles=new String[k];
             ids=new String[k];
+            urls2=new String[k];
 
             for(int i = 0; i < MovieArray.length(); i++) {
 
@@ -182,7 +185,10 @@ public class MainActivityFragment extends Fragment {
                 ids[i]=""+int_variable;
                 String idvalue = moviearraydata.getString(poster_path);
                 urls[i]=("http://image.tmdb.org/t/p/w185" +idvalue);
+                idvalue=moviearraydata.getString(backdrop_path);
+                urls2[i]=("http://image.tmdb.org/t/p/w780"+idvalue);
                 idvalue = moviearraydata.getString(overview);
+
                 overviews[i]=""+idvalue;
                 int_variable = moviearraydata.getInt(vote_average);
                 vote_averages[i]=""+int_variable;
