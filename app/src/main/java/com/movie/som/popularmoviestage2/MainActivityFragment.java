@@ -18,6 +18,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.movie.som.popularmoviestage2.databaseHelper.DatabaseHandler;
+import com.movie.som.popularmoviestage2.databaseHelper.Movie;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +31,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -39,6 +43,7 @@ public class MainActivityFragment extends Fragment {
     static String[] string1;
     GridView gridView;
     String[] urls,ids,overviews,vote_averages,release_dates,titles,urls2;
+    String[] strings;
     public MainActivityFragment() {
 
     }
@@ -62,8 +67,92 @@ public class MainActivityFragment extends Fragment {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String m = prefs.getString(getString(R.string.pref_movie),getString(R.string.pref_popular));
-        movieTask.execute(m);
+        if(m.equals("favourite"))
+        {
+            Log.v("myvaluefromrthepref","ok will make the changes to the data base ");
+            getFavourite();
+
+        }
+        else {
+            movieTask.execute(m);
+            Log.v("myin", "Refreshing the movies");
+        }
+
     }
+
+
+    public void getFavourite()
+    {
+        DatabaseHandler db = new DatabaseHandler(getActivity());
+        List<Movie> movies = db.getAllMovies();
+        int i=0;
+
+        for (Movie mv : movies) {
+            i++;
+        }
+
+        urls=new String[i];
+        ids=new String[i];
+        overviews=new String[i];
+        vote_averages=new String[i];
+        release_dates=new String[i];
+        titles=new String[i];
+        urls2=new String[i];
+        int j=0;
+        for (Movie mv : movies) {
+            String log = "Id: "+mv.getId()+"\n   Movie ID: " + mv.getMovie_id()+",\n   Title : "+mv.getTitle()+"\n   overview : "+mv.getOverview()+"\n   vote average : "+mv.getVote_average()+"\n   Release Date : "+mv.getOverview()+"\n poster:"+mv.getPoster()+"\n backdrop_image :"+mv.getBackdrop_image();
+            // Writing Contacts to log
+            ids[j]=""+mv.getMovie_id();
+            overviews[j]=mv.getOverview();
+            vote_averages[j]=mv.getVote_average();
+            release_dates[j]=mv.getRelease_date();
+            titles[j]=mv.getTitle();
+            urls2[j]=mv.getBackdrop_image();
+            urls[j]=""+mv.getPoster();
+            j++;
+            Log.d("Name: ", log);
+        }
+        ////////////////
+       /* intent.putExtra("title",""+titles[m]);
+        intent.putExtra("overview",""+overviews[m]);
+        intent.putExtra("url",""+urls[m]);
+        intent.putExtra("url2",""+urls2[m]);
+        intent.putExtra("vote_average",""+vote_averages[m]);
+        intent.putExtra("release_date",""+release_dates[m]);
+        intent.putExtra("id",""+ids[m]);*/
+
+
+
+
+        ///////////////
+
+
+//String[] strings={"http://image.tmdb.org/t/p/w185/jLRllZsubY8UWpeMyDLVXdRyEWi.jpg","http://image.tmdb.org/t/p/w185/jLRllZsubY8UWpeMyDLVXdRyEWi.jpg","http://image.tmdb.org/t/p/w185/jLRllZsubY8UWpeMyDLVXdRyEWi.jpg"};
+        mAdapter = new MovieAdapter(getActivity(),urls);
+        gridView.setAdapter(mAdapter);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
     public void onStart() {
         super.onStart();
         updateMovie();
@@ -74,12 +163,7 @@ public class MainActivityFragment extends Fragment {
         int id=item.getItemId();
         if (id == R.id.refresh)
         {
-            FetchMovieData movieData = new FetchMovieData();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String m = prefs.getString(getString(R.string.pref_movie),getString(R.string.pref_popular));
-            movieData.execute(m);
-            Log.v("myin","Refreshing the movies");
-
+            updateMovie();
             return true;
         }
         if (id == R.id.action_settings)

@@ -16,7 +16,7 @@ import java.util.List;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "movieOfflineDb1";
+    private static final String DATABASE_NAME = "movieOfflineDb2";
     private static final String TABLE_MOVIES = "movie";
     private static final String KEY_ID = "id";
     private static final String KEY_MOVIE_ID= "movie_id";
@@ -24,7 +24,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_OVERVIEW = "overview";
     private static final String KEY_RELEASE_DATE = "release_date";
     private static final String KEY_VOTE_AVERAGE = "vote_average";
-
+    private static final String KEY_POSTER = "poster";
+    private static final String KEY_BACKDROP_PATH = "backdrop_image";
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         //3rd argument to be passed is CursorFactory instance
@@ -35,11 +36,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_MOVIES_TABLE = "CREATE TABLE " + TABLE_MOVIES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_MOVIE_ID + " TEXT,"+KEY_TITLE+" TEXT,"
-                + KEY_OVERVIEW + " TEXT," +KEY_VOTE_AVERAGE+" TEXT,"+KEY_RELEASE_DATE+" TEXT"+ ")";
+                + KEY_OVERVIEW + " TEXT," +KEY_VOTE_AVERAGE+" TEXT," +KEY_RELEASE_DATE+" TEXT," +KEY_POSTER+" TEXT," +KEY_BACKDROP_PATH+" TEXT"+")";
         db.execSQL(CREATE_MOVIES_TABLE);
         Log.v("moviedb created",": ok");
     }
-
+//+KEY_RELEASE_DATE+" TEXT,"+ ")";
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -60,6 +61,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_OVERVIEW,movie.getOverview());// overview
         values.put(KEY_VOTE_AVERAGE,movie.getVote_average());//voter average
         values.put(KEY_RELEASE_DATE,movie.getRelease_date());//release date
+      values.put(KEY_POSTER,movie.getPoster());//release date
+      values.put(KEY_BACKDROP_PATH,movie.getBackdrop_image());//release date
 
         // Inserting Row
         db.insert(TABLE_MOVIES, null, values);
@@ -77,7 +80,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        Movie movie = new Movie(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), cursor.getString(3),cursor.getString(4),cursor.getString(5));
+        Movie movie = new Movie(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7));
         // return movie
         return movie;
     }
@@ -101,6 +104,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 movie.setOverview(cursor.getString(3));
                 movie.setVote_average(cursor.getString(4));
                 movie.setRelease_date(cursor.getString(5));
+                movie.setPoster(cursor.getString(6));
+                movie.setBackdrop_image(cursor.getString(7));
                 // Adding contact to list
                 movieList.add(movie);
             } while (cursor.moveToNext());
@@ -115,11 +120,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+
         values.put(KEY_MOVIE_ID, movie.getMovie_id()); //movie id
         values.put(KEY_TITLE, movie.getTitle()); // title
         values.put(KEY_OVERVIEW,movie.getOverview());// overview
         values.put(KEY_VOTE_AVERAGE,movie.getVote_average());//voter average
         values.put(KEY_RELEASE_DATE,movie.getRelease_date());//release date
+        values.put(KEY_POSTER,movie.getPoster());//release date
+        values.put(KEY_BACKDROP_PATH,movie.getBackdrop_image());//release date
 
         // updating row
         return db.update(TABLE_MOVIES, values, KEY_ID + " = ?",

@@ -187,25 +187,29 @@ public class FetchMovieReviewData extends AsyncTask<String , Void,String[]> {
 protected void onPostExecute(String[] strings) {
 
         Log.v("oknow","i am executing");
-
-       int j=0;
-     MovieDetailFragment.adapterReview.clear();
-     Log.v("sizeofjson",""+jsonSize);
-      // for(int j=0;j<jsonSize;j++) {
-     for (String s : strings) {
-            MovieDetailFragment.reviewCount.add(new MovieReview(""+author[j],""+content[j]));
-j++;
-       }
-     if (jsonSize==0)
-     {
-         MovieDetailFragment.reviewCount.add(new MovieReview("","no reviews"));
-     }
+try {
+    int j = 0;
+    MovieDetailFragment.adapterReview.clear();
+    Log.v("sizeofjson", "" + jsonSize);
+    // for(int j=0;j<jsonSize;j++) {
+    for (String s : strings) {
+        MovieDetailFragment.reviewCount.add(new MovieReview("" + author[j], "" + content[j]));
+        j++;
+    }
+    if (jsonSize == 0) {
+        MovieDetailFragment.reviewCount.add(new MovieReview("", "no reviews"));
+    }
 
 //update the list size for the total number of the trailers .....................
 
 
+    MovieDetailFragment.updateList2();
 
-MovieDetailFragment.updateList2();
+
+}catch (NullPointerException e)
+{
+    Log.v("gotgheexp",""+e);
+}
     }
 
 

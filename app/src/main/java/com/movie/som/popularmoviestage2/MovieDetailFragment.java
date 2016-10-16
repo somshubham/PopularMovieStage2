@@ -181,10 +181,17 @@ public static TrailerAdapter adapter;
 
     //my code.......
     private void updateMovieDetail(String movieId) {
-        FetchMovieTrailerData fetchMovieTrailerData = new FetchMovieTrailerData();
-        FetchMovieReviewData fetchMovieReviewData = new FetchMovieReviewData();
-        fetchMovieTrailerData.execute(movieId);
-        fetchMovieReviewData.execute(movieId);
+        try
+        {
+            FetchMovieTrailerData fetchMovieTrailerData = new FetchMovieTrailerData();
+            FetchMovieReviewData fetchMovieReviewData = new FetchMovieReviewData();
+            fetchMovieTrailerData.execute(movieId);
+            fetchMovieReviewData.execute(movieId);
+        }catch (Exception e)
+        {
+System.out.print(e);
+        }
+
     }
 
 

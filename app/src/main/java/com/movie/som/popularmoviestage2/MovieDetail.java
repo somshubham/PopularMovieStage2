@@ -1,6 +1,7 @@
 package com.movie.som.popularmoviestage2;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -28,6 +29,8 @@ public class MovieDetail extends AppCompatActivity {
     private String overview;
     private String vote;
     private String releasedate;
+    private String poster;
+    private String backdrop_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +56,29 @@ public class MovieDetail extends AppCompatActivity {
         releasedate=data;
         data=intent.getStringExtra("id");
         movieid=data;
+        Log.v("movieidd",""+movieid);
 
         Log.v("Title",""+data);
         //t.setText(data);
         data=intent.getStringExtra("url2");
+        backdrop_image=data;
         ImageView imageView2=(ImageView)findViewById(R.id.backdrop_image_view);
         Log.v("backdroup_image",""+data);
         Picasso.with(this).load(data).into(imageView2);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.favorite_action_button);
+
+
+        data = intent.getStringExtra("url");
+        poster=data;
+
+
+
+      final  FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.favorite_action_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimaryDark)));
+
                 Snackbar.make(view, "Added to favorites", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                 Toast.makeText(MovieDetail.this, "ok ", Toast.LENGTH_SHORT).show();
@@ -75,7 +89,7 @@ public class MovieDetail extends AppCompatActivity {
 
                 // Inserting Contacts
                 Log.d("Insert: ", "Inserting ..");
-                db.addMovie(new Movie(movieid,title,overview,vote,releasedate));
+                db.addMovie(new Movie(movieid,title,overview,vote,releasedate,poster,backdrop_image));
                 // db.addContact(new Contact("Ravi", "9100000000"));
                 //db.addContact(new Contact("Srinivas", "9199999999"));
                 // db.addContact(new Contact("Tommy", "9522222222"));
@@ -86,7 +100,7 @@ public class MovieDetail extends AppCompatActivity {
                 List<Movie> movies = db.getAllMovies();
 
                 for (Movie mv : movies) {
-                    String log = "Id: "+mv.getId()+"\n   Movie ID: " + mv.getId()+",\n   Title : "+mv.getTitle()+"\n   overview : "+mv.getOverview()+"\n   vote average : "+mv.getVote_average()+"\n   Release Date : "+mv.getOverview();
+                    String log = "Id: "+mv.getId()+"\n   Movie ID: " + mv.getMovie_id()+",\n   Title : "+mv.getTitle()+"\n   overview : "+mv.getOverview()+"\n   vote average : "+mv.getVote_average()+"\n   Release Date : "+mv.getOverview()+"\n poster:"+mv.getPoster()+"\n backdrop_image :"+mv.getBackdrop_image();
                     // Writing Contacts to log
                     Log.d("Name: ", log);
                 }
