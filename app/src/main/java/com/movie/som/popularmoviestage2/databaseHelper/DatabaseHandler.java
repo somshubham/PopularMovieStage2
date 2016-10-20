@@ -70,19 +70,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+
     // code to get the single movie
-    Movie getMovie(int id) {
+   public  Movie getMovie(Movie movie) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_MOVIES, new String[] { KEY_ID,
-                       KEY_MOVIE_ID, KEY_TITLE,KEY_OVERVIEW,KEY_VOTE_AVERAGE,KEY_RELEASE_DATE }, KEY_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
+                        KEY_MOVIE_ID, KEY_TITLE,KEY_OVERVIEW,KEY_VOTE_AVERAGE,KEY_RELEASE_DATE }, KEY_MOVIE_ID + "=?",
+                new String[] { String.valueOf(movie.getMovie_id()) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Movie movie = new Movie(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7));
+        Movie movieData = new Movie(Integer.parseInt(cursor.getString(0)),cursor.getString(1), cursor.getString(2), cursor.getString(3),cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getString(7));
         // return movie
-        return movie;
+
+        return movieData;
     }
 
     // code to get all movies in a list view
@@ -115,8 +117,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return movieList;
     }
 
-    // code to update the single contact
-    public int updateContact(Movie movie) {
+    // code to update the single Movie
+    public int updateMovie(Movie movie) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -134,13 +136,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 new String[] { String.valueOf(movie.getId()) });
     }
 
-    // Deleting single contact
-    public void deleteContact(Movie movie) {
+
+
+
+
+    // Deleting single Movie
+    public void deleteMovie(Movie movie) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_MOVIES, KEY_ID + " = ?",
-                new String[] { String.valueOf(movie.getId()) });
+        db.delete(TABLE_MOVIES, KEY_MOVIE_ID + " = ?", new String[] { String.valueOf(movie.getMovie_id()) });
+       // db.execSQL("delete from "+ TABLE_MOVIES);
         db.close();
     }
+
+
 
     // Getting contacts Count
     public int getContactsCount() {

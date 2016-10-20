@@ -6,5 +6,6 @@
     -->
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
+    <color name="colorPrimaryPink">#c4096d</color>
     <color name="colorAccent">#40a9ff</color>
 </resources>

@@ -2,6 +2,7 @@ package com.movie.som.popularmoviestage2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -163,7 +164,7 @@ public class MainActivityFragment extends Fragment {
         int id=item.getItemId();
         if (id == R.id.refresh)
         {
-            updateMovie();
+           updateMovie();
             return true;
         }
         if (id == R.id.action_settings)
